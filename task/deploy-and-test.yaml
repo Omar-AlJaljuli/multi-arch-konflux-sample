@@ -12,7 +12,10 @@ spec:
   steps:
     - name: deploy-and-test
       image: ubuntu
+      env:
+        - name: kubeconfig
+          value: $(params.kubeconfig)
       script: |
         #!/usr/bin/env bash
         echo "Hello from Bash!"
-        echo "${params.kubeconfig}"
+        echo ${kubeconfig}
