@@ -25,7 +25,7 @@ spec:
           - name: revision
             value: main
           - name: pathInRepo
-            value: tasks/test_metadata.yaml
+            value: task/test_metadata.yaml
       params:
         - name: SNAPSHOT
           value: $(params.SNAPSHOT)
