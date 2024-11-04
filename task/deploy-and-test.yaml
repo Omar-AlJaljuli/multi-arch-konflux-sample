@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: deploy-and-test
+spec:
+  description: |
+    This step runs the script that deploys RHDH and runs the tests
+  params:
+    - name: kubeconfig
+      default: "name"
+      description: "config required to use kubectl/oc"
+  steps:
+    - name: deploy-and-test
+      image: ubuntu
+      script: |
+        #!/usr/bin/env bash
+        echo "Hello from Bash!"
+        echo "${params.kubeconfig}"

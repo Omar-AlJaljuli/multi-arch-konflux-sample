@@ -1,0 +1,45 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: konflux-showcase-ci-persistent
+spec:
+  description: |
+    integration test which deploys RHDH onto an existing persistent cluster using Helm and runs the e2e
+    test suite onto that instance
+  params:
+    - description: Snapshot of the application
+      name: SNAPSHOT
+      default: '{"components": [{"name":"test-app", "containerImage": "quay.io/example/repo:latest"}]}'
+      type: string
+    - description: Namespace where the the Operator bundle will be deployed.
+      name: NAMESPACE
+      default: default
+      type: string
+  tasks:
+    - name: parse-metadata
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/konflux-ci/integration-examples
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: tasks/test_metadata.yaml
+      params:
+        - name: SNAPSHOT
+          value: $(params.SNAPSHOT)
+    - name: openshift-ci-tests
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/Omar-AlJaljuli/multi-arch-konflux-sample
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: tasks/deploy-and-test.yaml
+      params:
+        - name: kubeconfig
+          value: "printed correctly"
+      
