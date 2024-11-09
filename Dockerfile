@@ -47,8 +47,8 @@ RUN curl -fsSL https://clis.cloud.ibm.com/install/linux | sh && \
     rm -rf /var/lib/apt/lists/*
 
 # Set Go version and the expected SHA256 hash for verification
-ENV GO_VERSION 1.19
-ENV GO_SHA256 464b6b66591f6cf055bc5df90a9750bf5fbc9d038722bb84a9d56a2bea974be6
+# ENV GO_VERSION 1.19
+# ENV GO_SHA256 464b6b66591f6cf055bc5df90a9750bf5fbc9d038722bb84a9d56a2bea974be6
 
 # Install Go and other tools used by the pipeline
 RUN apt-get update && \
@@ -61,10 +61,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Helm
-RUN curl -fsSL -o /tmp/helm.tar.gz "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" \
-    && tar -xzvf /tmp/helm.tar.gz -C /tmp \
-    && mv /tmp/linux-amd64/helm /usr/local/bin/helm \
-    && rm -rf /tmp/*
+# RUN curl -fsSL -o /tmp/helm.tar.gz "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" \
+#     && tar -xzvf /tmp/helm.tar.gz -C /tmp \
+#     && mv /tmp/linux-amd64/helm /usr/local/bin/helm \
+#     && rm -rf /tmp/*
 
 # Install OpenShift CLI (oc)
 RUN curl -fsSL -o /tmp/openshift-client-linux.tar.gz "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz" \
@@ -72,25 +72,25 @@ RUN curl -fsSL -o /tmp/openshift-client-linux.tar.gz "https://mirror.openshift.c
     && rm -rf /tmp/*
 
 # Install rsync
-RUN apt-get update -y && \
-    apt-get install -y rsync
+# RUN apt-get update -y && \
+#     apt-get install -y rsync
 
 # Install yq
-RUN wget https://github.com/mikefarah/yq/releases/download/v4.43.1/yq_linux_amd64.tar.gz -O - | tar xz && mv yq_linux_amd64 /usr/bin/yq
+# RUN wget https://github.com/mikefarah/yq/releases/download/v4.43.1/yq_linux_amd64.tar.gz -O - | tar xz && mv yq_linux_amd64 /usr/bin/yq
 
 # Install Azure CLI
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+# RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 # Set environment variables to make Go work correctly
-ENV GOPATH /go
-ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+# ENV GOPATH /go
+# ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 RUN go install github.com/kadel/pr-commenter@latest && \
     ibmcloud plugin install -f cloud-object-storage && \
     ibmcloud plugin install -f kubernetes-service
 
 # Install skopeo
-RUN apt-get update -y && \
-    apt-get install -y skopeo
+# RUN apt-get update -y && \
+#     apt-get install -y skopeo
 
 WORKDIR /tmp/
