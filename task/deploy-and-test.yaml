@@ -6,37 +6,32 @@ spec:
   description: |
     This step runs the script that deploys RHDH and runs the tests
   params:
-    - name: kubeconfig
-      default: ""
-      description: "config required to use kubectl/oc"
-    - name: username
-      default: ""
-      description: "cluster username to use for login"
-    - name: password
-      default: ""
-      description: "cluster password to use for login"
-    - name: apiServerUrl
-      default: ""
-      description: "cluster apiServerUrl to use for login"
+    - name: RHDH_SECRETS
+      default: rhdh-secrets
+  volumes:
+    - name: rhdh-secrets
+      secret: 
+        secretName: $(params.RHDH_SECRETS)
   steps:
     - name: deploy-and-test
       image: ubuntu
+      volumeMounts:
+        - mountPath: /etc/secrets
+          name: rhdh-secrets
+          readOnly: true
       env:
-        - name: kubeconfig
-          value: $(params.kubeconfig)
-        - name: username
-          value: $(params.username)
-        - name: password
-          value: $(params.password)
+        - name: RHDH_SECRETS
+          value: $(params.RHDH_SECRETS)
       script: |
         #!/usr/bin/env bash
         export HOME WORKSPACE
         HOME=/tmp
         WORKSPACE=$(pwd)
         cd /tmp || exit
-        echo ${apiServerUrl}
-        oc login ${apiServerUrl} --username=${username} --password=${password}
-        oc whoami --show-console
+        ls -la /etc/secrets
+        cat /etc/secrets/API_SERVER_URL
+        # oc login ${apiServerUrl} --username=${username} --password=${password}
+        # oc whoami --show-console
         # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh
         # ./install.sh 1.2-150-CI --namespace showcase --chartrepo
         
