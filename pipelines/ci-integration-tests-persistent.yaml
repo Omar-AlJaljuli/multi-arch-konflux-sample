@@ -41,18 +41,9 @@ spec:
             value: task/deploy-and-test.yaml
       params:
         - name: API_SERVER_URL
-          valueFrom:
-            secretKeyRef:
-              name: rhdh-secrets
-              key: API_SERVER_URL
+          default: ""
         - name: USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: rhdh-secrets
-              key: USERNAME
+          default: ""
         - name: PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: rhdh-secrets
-              key: PASSWORD
+          default: ""
       
