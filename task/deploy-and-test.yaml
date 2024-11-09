@@ -22,28 +22,19 @@ spec:
     - name: deploy-and-test
       image: ubuntu
       env:
-        - name: apiServerUrl
-          valueFrom:
-            secretKeyRef:
-              name: rhdh-secrets
-              key: API_SERVER_URL
+        - name: kubeconfig
+          value: $(params.kubeconfig)
         - name: username
-          valueFrom:
-            secretKeyRef:
-              name: rhdh-secrets
-              key: USERNAME
+          value: $(params.username)
         - name: password
-          valueFrom:
-            secretKeyRef:
-              name: rhdh-secrets
-              key: PASSWORD
+          value: $(params.password)
       script: |
         #!/usr/bin/env bash
         export HOME WORKSPACE
         HOME=/tmp
         WORKSPACE=$(pwd)
         cd /tmp || exit
-
+        echo ${apiServerUrl}
         oc login ${apiServerUrl} --username=${username} --password=${password}
         oc whoami --show-console
         # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh

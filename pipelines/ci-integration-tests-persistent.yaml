@@ -39,11 +39,31 @@ spec:
             value: main
           - name: pathInRepo
             value: task/deploy-and-test.yaml
-      params:
+      env:
+        steps:
+    - name: deploy-and-test
+      image: ubuntu
+      env:
         - name: API_SERVER_URL
-          default: ""
+          valueFrom:
+            secretKeyRef:
+              name: rhdh-secrets
+              key: API_SERVER_URL
         - name: USERNAME
-          default: ""
+          valueFrom:
+            secretKeyRef:
+              name: rhdh-secrets
+              key: USERNAME
         - name: PASSWORD
-          default: ""
+          valueFrom:
+            secretKeyRef:
+              name: rhdh-secrets
+              key: PASSWORD
+      params:
+        - name: apiServerUrl
+          value: $(API_SERVER_URL)
+        - name: username
+          value: $(USERNAME)
+        - name: password
+          value: $(PASSWORD)
       
