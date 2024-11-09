@@ -9,7 +9,7 @@ spec:
   params:
     - description: Snapshot of the application
       name: SNAPSHOT
-      default: '{"components": [{"name":"test-app", "containerImage": "quay.io/example/repo:latest"}]}'
+      default: '{"components": [{"name":"test2", "containerImage": "quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2"}]}'
       type: string
     - description: Namespace where the the Operator bundle will be deployed.
       name: NAMESPACE
@@ -40,6 +40,19 @@ spec:
           - name: pathInRepo
             value: task/deploy-and-test.yaml
       params:
-        - name: kubeconfig
-          value: "printed correctly"
+        - name: API_SERVER_URL
+          valueFrom:
+            secretKeyRef:
+              name: rhdh-secrets
+              key: API_SERVER_URL
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: rhdh-secrets
+              key: USERNAME
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rhdh-secrets
+              key: PASSWORD
       
