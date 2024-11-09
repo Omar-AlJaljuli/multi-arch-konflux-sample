@@ -1,18 +1,34 @@
-FROM mcr.microsoft.com/playwright:v1.47.2-jammy
+FROM registry.access.redhat.com/ubi9/ubi-micro:9.4-13
+  
+LABEL name="Simple image"
+LABEL description="A container image that does close to nothing"
+LABEL com.redhat.component="multi-arch-konflux-sample"
+LABEL io.k8s.description="A container image that does nothing"
+LABEL io.k8s.display-name="Do-nothing image"
 
-ENV CI=1 \
-  QT_X11_NO_MITSHM=1 \
-  _X11_NO_MITSHM=1 \
-  _MITSHM=0 \
-  NODE_PATH=/usr/local/lib/node_modules
+COPY LICENSE /licenses/
 
-# Define Helm and OpenShift CLI (oc) versions
-ENV HELM_VERSION="v3.12.3"
-ENV OC_VERSION="4.14.3"
+RUN \
+  echo echo "\"hello! I do nothing\"" > /entrypoint.sh && \
+  chmod +x /entrypoint.sh
+
+USER 65532:65532
+ENTRYPOINT /entrypoint.sh
+# FROM mcr.microsoft.com/playwright:v1.47.2-jammy
+
+# ENV CI=1 \
+#   QT_X11_NO_MITSHM=1 \
+#   _X11_NO_MITSHM=1 \
+#   _MITSHM=0 \
+#   NODE_PATH=/usr/local/lib/node_modules
+
+# # Define Helm and OpenShift CLI (oc) versions
+# ENV HELM_VERSION="v3.12.3"
+# ENV OC_VERSION="4.14.3"
 
 # ARG CI_XBUILD
 
-# should be root user
+# # should be root user
 # RUN echo "whoami: $(whoami)" \
 #   # command "id" should print:
 #   # uid=0(root) gid=0(root) groups=0(root)
@@ -29,14 +45,14 @@ ENV OC_VERSION="4.14.3"
 #   && npm i -g yarn@latest \
 #   # Show where Node loads required modules from
 #   && node -p 'module.paths'
-  # plus Electron and bundled Node versions
+#   # plus Electron and bundled Node versions
 
-RUN  echo  " node version:    $(node -v) \n" \
-    "npm version:     $(npm -v) \n" \
-    "yarn version:    $(yarn -v) \n" \
-    "typescript version:  $(tsc -v) \n" \
-    "debian version:  $(cat /etc/debian_version) \n" \
-    "user:            $(whoami) \n"
+# RUN  echo  " node version:    $(node -v) \n" \
+#     "npm version:     $(npm -v) \n" \
+#     "yarn version:    $(yarn -v) \n" \
+#     "typescript version:  $(tsc -v) \n" \
+#     "debian version:  $(cat /etc/debian_version) \n" \
+#     "user:            $(whoami) \n"
 
 # RUN curl -fsSL https://clis.cloud.ibm.com/install/linux | sh && \
 #     curl -sLO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
@@ -46,11 +62,11 @@ RUN  echo  " node version:    $(node -v) \n" \
 #     apt-get install -y sshpass jq colorized-logs && \
 #     rm -rf /var/lib/apt/lists/*
 
-# Set Go version and the expected SHA256 hash for verification
+# # Set Go version and the expected SHA256 hash for verification
 # ENV GO_VERSION 1.19
 # ENV GO_SHA256 464b6b66591f6cf055bc5df90a9750bf5fbc9d038722bb84a9d56a2bea974be6
 
-# Install Go and other tools used by the pipeline
+# # Install Go and other tools used by the pipeline
 # RUN apt-get update && \
 #     apt-get install -y curl && \
 #     curl -LO "https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz" && \
@@ -60,28 +76,28 @@ RUN  echo  " node version:    $(node -v) \n" \
 #     apt-get clean && \
 #     rm -rf /var/lib/apt/lists/*
 
-# Install Helm
+# # Install Helm
 # RUN curl -fsSL -o /tmp/helm.tar.gz "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" \
 #     && tar -xzvf /tmp/helm.tar.gz -C /tmp \
 #     && mv /tmp/linux-amd64/helm /usr/local/bin/helm \
 #     && rm -rf /tmp/*
 
-# Install OpenShift CLI (oc)
-RUN curl -fsSL -o /tmp/openshift-client-linux.tar.gz "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz" \
-    && tar -xzvf /tmp/openshift-client-linux.tar.gz -C /usr/local/bin oc kubectl \
-    && rm -rf /tmp/*
+# # Install OpenShift CLI (oc)
+# RUN curl -fsSL -o /tmp/openshift-client-linux.tar.gz "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux-${OC_VERSION}.tar.gz" \
+#     && tar -xzvf /tmp/openshift-client-linux.tar.gz -C /usr/local/bin oc kubectl \
+#     && rm -rf /tmp/*
 
-# Install rsync
+# # Install rsync
 # RUN apt-get update -y && \
 #     apt-get install -y rsync
 
-# Install yq
+# # Install yq
 # RUN wget https://github.com/mikefarah/yq/releases/download/v4.43.1/yq_linux_amd64.tar.gz -O - | tar xz && mv yq_linux_amd64 /usr/bin/yq
 
-# Install Azure CLI
+# # Install Azure CLI
 # RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
-# Set environment variables to make Go work correctly
+# # Set environment variables to make Go work correctly
 # ENV GOPATH /go
 # ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
@@ -89,8 +105,8 @@ RUN curl -fsSL -o /tmp/openshift-client-linux.tar.gz "https://mirror.openshift.c
 #     ibmcloud plugin install -f cloud-object-storage && \
 #     ibmcloud plugin install -f kubernetes-service
 
-# Install skopeo
+# # Install skopeo
 # RUN apt-get update -y && \
 #     apt-get install -y skopeo
 
-WORKDIR /tmp/
+# WORKDIR /tmp/
