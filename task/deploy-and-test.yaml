@@ -22,12 +22,21 @@ spec:
     - name: deploy-and-test
       image: ubuntu
       env:
-        - name: kubeconfig
-          value: $(params.kubeconfig)
+        - name: apiServerUrl
+          valueFrom:
+            secretKeyRef:
+              name: rhdh-secrets
+              key: API_SERVER_URL
         - name: username
-          value: $(params.username)
+          valueFrom:
+            secretKeyRef:
+              name: rhdh-secrets
+              key: USERNAME
         - name: password
-          value: $(params.password)
+          valueFrom:
+            secretKeyRef:
+              name: rhdh-secrets
+              key: PASSWORD
       script: |
         #!/usr/bin/env bash
         export HOME WORKSPACE
