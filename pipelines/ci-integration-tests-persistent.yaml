@@ -11,10 +11,6 @@ spec:
       name: SNAPSHOT
       default: '{"components": [{"name":"test2", "containerImage": "quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2"}]}'
       type: string
-    - description: Namespace where the the Operator bundle will be deployed.
-      name: NAMESPACE
-      default: default
-      type: string
   tasks:
     - name: parse-metadata
       taskRef:

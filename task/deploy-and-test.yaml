@@ -28,10 +28,12 @@ spec:
         HOME=/tmp
         WORKSPACE=$(pwd)
         cd /tmp || exit
-        ls -la /etc/secrets
-        cat /etc/secrets/API_SERVER_URL
-        # oc login ${apiServerUrl} --username=${username} --password=${password}
-        # oc whoami --show-console
+
+        API_SERVER_URL=$(cat /etc/secrets/API_SERVER_URL)
+        USERNAME=$(cat /etc/secrets/USERNAME)
+        PASSWORD=$(cat /etc/secrets/PASSWORD)
+        oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
+        oc whoami --show-console
         # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh
         # ./install.sh 1.2-150-CI --namespace showcase --chartrepo
         

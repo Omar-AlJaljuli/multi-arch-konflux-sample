@@ -95,3 +95,64 @@ spec:
                 value: $(tasks.provision-eaas-space.results.secretRef)
               - name: version
                 value: "$(steps.pick-version.results.version)"
+          - name: openshift-ci-tests
+            runAfter:
+              - provision-cluster
+            taskSpec:
+              params:
+                - name: bundleImage
+                  type: string
+                - name: namespace
+                  type: string
+              volumes:
+                - name: credentials
+                  emptyDir: {}
+              steps:
+                - name: get-kubeconfig
+                  ref:
+                    resolver: git
+                    params:
+                      - name: url
+                        value: https://github.com/konflux-ci/build-definitions.git
+                      - name: revision
+                        value: main
+                      - name: pathInRepo
+                        value: stepactions/eaas-get-ephemeral-cluster-credentials/0.1/eaas-get-ephemeral-cluster-credentials.yaml
+                  params:
+                    - name: eaasSpaceSecretRef
+                      value: $(tasks.provision-eaas-space.results.secretRef)
+                    - name: clusterName
+                      value: "$(tasks.provision-cluster.results.clusterName)"
+                    - name: credentials
+                      value: credentials
+                - name: deploy-and-test
+                  image: ubuntu
+                  env:
+                    - name: RHDH_SECRETS1
+                      value: "/credentials/$(steps.get-kubeconfig.results.username)"
+                    - name: RHDH_SECRETS2
+                      value: "/credentials/$(steps.get-kubeconfig.results.passwordPath)"
+                    - name: RHDH_SECRETS3
+                      value: "/credentials/$(steps.get-kubeconfig.results.apiServerUrl)"
+                  volumeMounts:
+                    - name: credentials
+                      mountPath: /credentials
+                  script: |
+                    #!/usr/bin/env bash
+                    export HOME WORKSPACE
+                    HOME=/tmp
+                    WORKSPACE=$(pwd)
+                    cd /tmp || exit
+                    ls /credentials
+                    cat ${RHDH_SECRETS1}
+                    cat ${RHDH_SECRETS2}
+                    cat ${RHDH_SECRETS3}
+
+                    # API_SERVER_URL=$(cat /etc/secrets/API_SERVER_URL)
+                    # USERNAME=$(cat /etc/secrets/USERNAME)
+                    # PASSWORD=$(cat /etc/secrets/PASSWORD)
+                    # oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
+                    # oc whoami --show-console
+                    # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh
+                    # ./install.sh 1.2-150-CI --namespace showcase --chartrepo
+                  
