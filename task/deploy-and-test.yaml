@@ -14,7 +14,7 @@ spec:
         secretName: $(params.RHDH_SECRETS)
   steps:
     - name: deploy-and-test
-      image: ubuntu
+      image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2:c5ede9a7b2caa42e32f745bea5b2c96d942cd06c
       volumeMounts:
         - mountPath: /etc/secrets
           name: rhdh-secrets
