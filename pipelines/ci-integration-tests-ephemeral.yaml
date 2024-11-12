@@ -138,7 +138,8 @@ spec:
               echo 'password path: ${PASSWORD_PATH}'
               PASSWORD=$(cat ${PASSWORD_PATH})
               oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
-              # oc whoami --show-console
+              echo 'and Now:'
+              oc whoami --show-console
               # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh
               # ./install.sh 1.2-150-CI --namespace showcase --chartrepo
             

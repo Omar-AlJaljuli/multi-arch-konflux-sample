@@ -16,7 +16,7 @@ spec:
     - name: deploy-and-test
       image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2:c5ede9a7b2caa42e32f745bea5b2c96d942cd06c
       volumeMounts:
-        - mountPath: "/$(params.rhdh_secrets)"
+        - mountPath: "/etc/secrets"
           name: $(params.rhdh_secrets)
           readOnly: true
       env:
@@ -29,9 +29,9 @@ spec:
         WORKSPACE=$(pwd)
         cd /tmp || exit
 
-        API_SERVER_URL=$(cat ${RHDH_SECRETS}/API_SERVER_URL)
-        USERNAME=$(cat ${RHDH_SECRETS}/USERNAME)
-        PASSWORD=$(cat ${RHDH_SECRETS}/PASSWORD)
+        API_SERVER_URL=$(cat /etc/secrets/API_SERVER_URL)
+        USERNAME=$(cat /etc/secrets/USERNAME)
+        PASSWORD=$(cat /etc/secrets/PASSWORD)
         oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
         oc whoami --show-console
         # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh
