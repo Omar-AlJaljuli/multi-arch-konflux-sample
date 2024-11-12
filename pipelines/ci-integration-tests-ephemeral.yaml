@@ -11,10 +11,6 @@ spec:
       name: SNAPSHOT
       default: '{"components": [{"name":"test-app", "containerImage": "quay.io/example/repo:latest"}]}'
       type: string
-    - description: Namespace where the the Operator bundle will be deployed.
-      name: NAMESPACE
-      default: default
-      type: string
   tasks:
     - name: parse-metadata
       taskRef:
@@ -100,10 +96,6 @@ spec:
         - provision-cluster
       taskSpec:
         params:
-          - name: bundleImage
-            type: string
-          - name: namespace
-            type: string
         volumes:
           - name: credentials
             emptyDir: {}
