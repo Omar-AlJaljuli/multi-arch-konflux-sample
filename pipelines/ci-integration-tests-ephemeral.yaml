@@ -121,11 +121,11 @@ spec:
             image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2:c5ede9a7b2caa42e32f745bea5b2c96d942cd06c
             env:
               - name: USERNAME
-                value: "/credentials/$(steps.get-kubeconfig.results.username)"
-              - name: PASSWORD
+                value: "$(steps.get-kubeconfig.results.username)"
+              - name: PASSWORD_PATH
                 value: "/credentials/$(steps.get-kubeconfig.results.passwordPath)"
               - name: API_SERVER_URL
-                value: "/credentials/$(steps.get-kubeconfig.results.apiServerURL)"
+                value: "$(steps.get-kubeconfig.results.apiServerURL)"
             volumeMounts:
               - name: credentials
                 mountPath: /credentials
@@ -135,14 +135,10 @@ spec:
               HOME=/tmp
               WORKSPACE=$(pwd)
               cd /tmp || exit
-              ls /credentials
-              USERNAME= $(cat ${USERNAME})
-
-
-              API_SERVER_URL=$(cat ${API_SERVER_URL})
-              PASSWORD=$(cat ${PASSWORD})
+              echo 'password path: ${PASSWORD_PATH}'
+              PASSWORD=$(cat ${PASSWORD_PATH})
               oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
-              oc whoami --show-console
+              # oc whoami --show-console
               # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh
               # ./install.sh 1.2-150-CI --namespace showcase --chartrepo
             
