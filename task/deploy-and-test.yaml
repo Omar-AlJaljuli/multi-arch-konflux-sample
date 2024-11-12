@@ -6,22 +6,22 @@ spec:
   description: |
     This step runs the script that deploys RHDH and runs the tests
   params:
-    - name: RHDH_SECRETS
+    - name: rhdh_secrets
       default: rhdh-secrets
   volumes:
-    - name: rhdh-secrets
+    - name: $(params.rhdh_secrets)
       secret: 
-        secretName: $(params.RHDH_SECRETS)
+        secretName: $(params.rhdh_secrets)
   steps:
     - name: deploy-and-test
       image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2:c5ede9a7b2caa42e32f745bea5b2c96d942cd06c
       volumeMounts:
-        - mountPath: /etc/secrets
-          name: rhdh-secrets
+        - mountPath: "/$(params.rhdh_secrets)"
+          name: $(params.rhdh_secrets)
           readOnly: true
       env:
         - name: RHDH_SECRETS
-          value: $(params.RHDH_SECRETS)
+          value: $(params.rhdh_secrets)
       script: |
         #!/usr/bin/env bash
         export HOME WORKSPACE
@@ -29,9 +29,9 @@ spec:
         WORKSPACE=$(pwd)
         cd /tmp || exit
 
-        API_SERVER_URL=$(cat /etc/secrets/API_SERVER_URL)
-        USERNAME=$(cat /etc/secrets/USERNAME)
-        PASSWORD=$(cat /etc/secrets/PASSWORD)
+        API_SERVER_URL=$(cat ${RHDH_SECRETS}/API_SERVER_URL)
+        USERNAME=$(cat ${RHDH_SECRETS}/USERNAME)
+        PASSWORD=$(cat ${RHDH_SECRETS}/PASSWORD)
         oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
         oc whoami --show-console
         # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh

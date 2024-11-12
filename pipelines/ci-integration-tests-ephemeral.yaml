@@ -118,14 +118,14 @@ spec:
               - name: credentials
                 value: credentials
           - name: deploy-and-test
-            image: ubuntu
+            image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2:c5ede9a7b2caa42e32f745bea5b2c96d942cd06c
             env:
-              - name: RHDH_SECRETS1
+              - name: USERNAME
                 value: "/credentials/$(steps.get-kubeconfig.results.username)"
-              - name: RHDH_SECRETS2
+              - name: PASSWORD
                 value: "/credentials/$(steps.get-kubeconfig.results.passwordPath)"
-              - name: RHDH_SECRETS3
-                value: "/credentials/$(steps.get-kubeconfig.results.apiServerUrl)"
+              - name: API_SERVER_URL
+                value: "/credentials/$(steps.get-kubeconfig.results.apiServerURL)"
             volumeMounts:
               - name: credentials
                 mountPath: /credentials
@@ -136,15 +136,13 @@ spec:
               WORKSPACE=$(pwd)
               cd /tmp || exit
               ls /credentials
-              cat ${RHDH_SECRETS1}
-              cat ${RHDH_SECRETS2}
-              cat ${RHDH_SECRETS3}
+              USERNAME= $(cat ${USERNAME})
 
-              # API_SERVER_URL=$(cat /etc/secrets/API_SERVER_URL)
-              # USERNAME=$(cat /etc/secrets/USERNAME)
-              # PASSWORD=$(cat /etc/secrets/PASSWORD)
-              # oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
-              # oc whoami --show-console
+
+              API_SERVER_URL=$(cat ${API_SERVER_URL})
+              PASSWORD=$(cat ${PASSWORD})
+              oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
+              oc whoami --show-console
               # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh
               # ./install.sh 1.2-150-CI --namespace showcase --chartrepo
             
