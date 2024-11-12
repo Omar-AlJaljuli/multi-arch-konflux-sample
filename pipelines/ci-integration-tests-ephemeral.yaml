@@ -135,9 +135,10 @@ spec:
               HOME=/tmp
               WORKSPACE=$(pwd)
               cd /tmp || exit
-              echo 'password path: ${PASSWORD_PATH}'
+              echo "password path: ${PASSWORD_PATH}"
               PASSWORD=$(cat ${PASSWORD_PATH})
-              oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
+              echo ${PASSWORD}
+              oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD} --insecure-skip-tls-verify
               echo 'and Now:'
               oc whoami --show-console
               # curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.2-150-CI/installation/install.sh && chmod +x install.sh
