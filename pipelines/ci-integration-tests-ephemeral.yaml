@@ -160,4 +160,4 @@ spec:
               yarn install
               yarn playwright install
               cd playwright/e2e/
-              playwright test ./instance-health-check.spec.ts
+              yarn playwright test ./instance-health-check.spec.ts
