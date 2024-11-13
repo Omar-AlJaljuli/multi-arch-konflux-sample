@@ -118,7 +118,7 @@ spec:
               - name: credentials
                 value: credentials
           - name: deploy-and-test
-            image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2:c5ede9a7b2caa42e32f745bea5b2c96d942cd06c
+            image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2:5bca399965bf7bebe60d7739ccaecbf46ad60e60 
             env:
               - name: USERNAME
                 value: "$(steps.get-kubeconfig.results.username)"
