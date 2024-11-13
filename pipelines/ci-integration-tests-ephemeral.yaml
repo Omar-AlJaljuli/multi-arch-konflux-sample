@@ -156,6 +156,8 @@ spec:
               git clone https://github.com/Omar-AlJaljuli/janus-idp-backstage-showcase-.git
               cd janus-idp-backstage-showcase- || exit
               git checkout "Konflux-test-1" || exit
-
-              cd e2e-tests/playwright/e2e/
+              cd e2e-tests/
+              yarn install
+              yarn playwright install
+              cd playwright/e2e/
               playwright test ./instance-health-check.spec.ts
