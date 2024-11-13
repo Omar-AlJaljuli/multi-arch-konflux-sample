@@ -154,7 +154,7 @@ spec:
               ./install.sh 1.3-124-CI --namespace showcase --chartrepo
 
               git clone https://github.com/Omar-AlJaljuli/janus-idp-backstage-showcase-.git
-              cd backstage-showcase || exit
+              cd janus-idp-backstage-showcase- || exit
               git checkout "Konflux-test-1" || exit
 
               cd e2e-tests/playwright/e2e/
