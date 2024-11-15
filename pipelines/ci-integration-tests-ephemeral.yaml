@@ -146,7 +146,7 @@ spec:
                 local wait_seconds=30
 
                 echo "Checking if Backstage is up and running at ${url}"
-
+                oc whoami --show-console
                 for ((i = 1; i <= max_attempts; i++)); do
                   local http_status
                   http_status=$(curl --insecure -I -s "${url}" | grep HTTP | awk '{print $2}')
@@ -159,8 +159,7 @@ spec:
                     return 0
                   else
                     echo "Attempt ${i} of ${max_attempts}: Backstage not yet available (HTTP Status: ${http_status})"
-                    oc logs -l app.kubernetes.io/component=backstage,app.kubernetes.io/instance=rhdh,app.kubernetes.io/name=backstage --tail=5 -c install-dynamic-plugins -n showcase | grep "CatalogEntityFetchByName" | head -n 1
-                    oc logs -l app.kubernetes.io/component=backstage,app.kubernetes.io/instance=rhdh,app.kubernetes.io/name=backstage --tail=5 -c backstage-backend -n showcase | grep "CatalogEntityFetchByName" | head -n 1
+                    oc get pods -n showcase
                     sleep "${wait_seconds}"
                   fi
                 done
