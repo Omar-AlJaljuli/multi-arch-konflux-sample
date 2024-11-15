@@ -159,7 +159,8 @@ spec:
                     return 0
                   else
                     echo "Attempt ${i} of ${max_attempts}: Backstage not yet available (HTTP Status: ${http_status})"
-                    oc logs -l app.kubernetes.io/component=backstage,app.kubernetes.io/instance=rhdh,app.kubernetes.io/name=backstage --tail=5 -c backstage-backend -n showcase-ci-nightly | grep "CatalogEntityFetchByName" | head -n 1
+                    oc logs -l app.kubernetes.io/component=backstage,app.kubernetes.io/instance=rhdh,app.kubernetes.io/name=backstage --tail=5 -c install-dynamic-plugins -n showcase | grep "CatalogEntityFetchByName" | head -n 1
+                    oc logs -l app.kubernetes.io/component=backstage,app.kubernetes.io/instance=rhdh,app.kubernetes.io/name=backstage --tail=5 -c backstage-backend -n showcase | grep "CatalogEntityFetchByName" | head -n 1
                     sleep "${wait_seconds}"
                   fi
                 done
