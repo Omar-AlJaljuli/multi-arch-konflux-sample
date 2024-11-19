@@ -1,4 +1,10 @@
-FROM registry.access.redhat.com/ubi9/nodejs-20:9.5-1731603589 AS build  
+FROM registry.access.redhat.com/ubi9/ubi-micro:9.4-13
+  
+LABEL name="Simple image"
+LABEL description="A container image that does close to nothing"
+LABEL com.redhat.component="multi-arch-konflux-sample"
+LABEL io.k8s.description="A container image that does nothing"
+LABEL io.k8s.display-name="Do-nothing image"
 
 COPY LICENSE /licenses/
 
