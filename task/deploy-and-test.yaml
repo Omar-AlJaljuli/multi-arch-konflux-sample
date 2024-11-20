@@ -37,15 +37,15 @@ spec:
 
         export BASE_URL="redhat-developer-hub-showcase.$(oc get ingresses.config/cluster -o jsonpath='{.spec.domain}')"
         
-        if oc get namespace showcase >/dev/null 2>&1; then
-          echo "Namespace showcase already exists! refreshing namespace"
-          oc delete namespace showcase
-        fi
+        # if oc get namespace showcase >/dev/null 2>&1; then
+        #   echo "Namespace showcase already exists! refreshing namespace"
+        #   oc delete namespace showcase
+        # fi
 
         curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.3-124-CI/installation/install.sh && chmod +x install.sh
         ./install.sh 1.3-124-CI --namespace showcase --chartrepo
 
-        sleep 100
+        # sleep 100
 
         git clone https://github.com/Omar-AlJaljuli/janus-idp-backstage-showcase-.git
         cd janus-idp-backstage-showcase- || exit
