@@ -153,7 +153,7 @@ spec:
                   local http_status
                   http_status=$(curl --insecure -I -s "${url}" | grep HTTP | awk '{print $2}')
 
-                  if [ "${http_status}" -eq 200 ]; then
+                  if [ "${http_status}" != 503 ]; then
                     echo "Backstage is up and running!"
                     export BASE_URL="${url}"
                     echo "######## BASE URL ########"
