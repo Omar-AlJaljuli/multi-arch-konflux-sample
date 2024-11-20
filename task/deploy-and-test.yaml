@@ -76,8 +76,8 @@ spec:
         cd janus-idp-backstage-showcase- || exit
         git checkout "Konflux-CI" || exit
         cd e2e-tests/
-        yarn install
-        yarn playwright install
+        yarn create playwright || true
+        npm init playwright@latest
         
         cd playwright/e2e/
         yarn playwright test ./instance-health-check.spec.ts

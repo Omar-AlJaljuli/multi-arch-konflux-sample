@@ -133,42 +133,13 @@ spec:
                 mountPath: /credentials
             script: |
               #!/usr/bin/env bash
+              set -xe
               export HOME WORKSPACE
               HOME=/tmp
               WORKSPACE=$(pwd)
               cd /tmp || exit
-              
 
-              check_backstage_running() {
-                local release_name=$1
-                local namespace=$2
-                local url=$3
-
-                local max_attempts=30
-                local wait_seconds=30
-
-                echo "Checking if Backstage is up and running at ${url}"
-                oc whoami --show-console
-                for ((i = 1; i <= max_attempts; i++)); do
-                  local http_status
-                  http_status=$(curl --insecure -I -s "${url}" | grep HTTP | awk '{print $2}')
-
-                  if [ "${http_status}" != 503 ]; then
-                    echo "Backstage is up and running!"
-                    export BASE_URL="${url}"
-                    echo "######## BASE URL ########"
-                    echo "${BASE_URL}"
-                    return 0
-                  else
-                    echo "Attempt ${i} of ${max_attempts}: Backstage not yet available (HTTP Status: ${http_status})"
-                    oc get pods -n showcase
-                    sleep "${wait_seconds}"
-                  fi
-                done
-
-                echo "Failed to reach Backstage at ${BASE_URL} after ${max_attempts} attempts." | tee -a "/tmp/${LOGFILE}"
-                return 1
-              }
+              sleep 240
 
               PASSWORD=$(cat ${PASSWORD_PATH})
               oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD} --insecure-skip-tls-verify
@@ -185,8 +156,7 @@ spec:
               cd janus-idp-backstage-showcase- || exit
               git checkout "Konflux-CI" || exit
               cd e2e-tests/
-              yarn install
-              yarn playwright install
+              yarn create playwright || npm init playwright@latest
 
               cd playwright/e2e/
               yarn playwright test ./instance-health-check.spec.ts
