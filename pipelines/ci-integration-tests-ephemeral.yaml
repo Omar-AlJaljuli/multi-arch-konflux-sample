@@ -119,6 +119,31 @@ spec:
               WORKSPACE=$(pwd)
               cd /tmp || exit
 
+              check_backstage_running() {
+                local release_name=$1
+                local namespace=$2
+                local url=$3
+                local max_attempts=30
+                local wait_seconds=30
+                echo "Checking if Backstage is up and running at ${url}"
+                for ((i = 1; i <= max_attempts; i++)); do
+                  local http_status
+                  http_status=$(curl --insecure -I -s "${url}" | grep HTTP | awk '{print $2}')
+                  if [ "${http_status}" -eq 200 ]; then
+                    echo "Backstage is up and running!"
+                    export BASE_URL="${url}"
+                    echo "######## BASE URL ########"
+                    echo "${BASE_URL}"
+                    return 0
+                  else
+                    echo "Attempt ${i} of ${max_attempts}: Backstage not yet available (HTTP Status: ${http_status})"
+                    sleep "${wait_seconds}"
+                  fi
+                done
+                echo "Failed to reach Backstage at ${BASE_URL} after ${max_attempts} attempts." | tee -a "/tmp/${LOGFILE}"
+                return 1
+              }
+
               PASSWORD=$(cat ${PASSWORD_PATH})
               oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD} --insecure-skip-tls-verify
               echo "Password: ${PASSWORD}"
@@ -129,15 +154,14 @@ spec:
               curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.3-124-CI/installation/install.sh && chmod +x install.sh
               ./install.sh 1.3-124-CI --namespace showcase --chartrepo
               
-              sleep 300
+              check_backstage_running redhat-developer-hub showcase ${BASE_URL}
 
               oc get routes -n showcase
               git clone https://github.com/Omar-AlJaljuli/janus-idp-backstage-showcase-.git
               cd janus-idp-backstage-showcase- || exit
-              git checkout "Konflux-test-1" || exit
+              git checkout "Konflux-POC" || exit
               cd e2e-tests/
               yarn install
               yarn playwright install
               
-              cd playwright/e2e/
-              yarn playwright test ./instance-health-check.spec.ts
+              yarn showcase
