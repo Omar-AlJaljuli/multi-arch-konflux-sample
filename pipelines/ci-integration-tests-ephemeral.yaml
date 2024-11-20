@@ -124,7 +124,7 @@ spec:
               echo "Password: ${PASSWORD}"
               echo "Username: ${USERNAME}"
               oc create ns showcase
-              export BASE_URL="redhat-developer-hub-showcase.$(oc get ingresses.config/cluster -o jsonpath='{.spec.domain}')"
+              export BASE_URL="https://redhat-developer-hub-showcase.$(oc get ingresses.config/cluster -o jsonpath='{.spec.domain}')"
               
               curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.3-124-CI/installation/install.sh && chmod +x install.sh
               ./install.sh 1.3-124-CI --namespace showcase --chartrepo

@@ -35,7 +35,7 @@ spec:
         PASSWORD=$(cat /etc/secrets/PASSWORD)
         oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
 
-        export BASE_URL="redhat-developer-hub-showcase.$(oc get ingresses.config/cluster -o jsonpath='{.spec.domain}')"
+        export BASE_URL="https://redhat-developer-hub-showcase.$(oc get ingresses.config/cluster -o jsonpath='{.spec.domain}')"
         
         # if oc get namespace showcase >/dev/null 2>&1; then
         #   echo "Namespace showcase already exists! refreshing namespace"
