@@ -155,9 +155,10 @@ spec:
               check_backstage_running redhat-developer-hub showcase ${BASE_URL}
               git clone https://github.com/Omar-AlJaljuli/janus-idp-backstage-showcase-.git
               cd janus-idp-backstage-showcase- || exit
-              git checkout "Konflux-CI" || exit
+              git checkout "Konflux-test-1" || exit
               cd e2e-tests/
-              yarn create playwright || npm init playwright@latest
-
+              yarn install
+              yarn playwright install
+              
               cd playwright/e2e/
-              yarn playwright test ./instance-health-check.spec.ts
+              yarn playwright test ./konflux-poc.spec.ts

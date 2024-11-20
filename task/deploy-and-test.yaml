@@ -36,11 +36,16 @@ spec:
         oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
 
         export BASE_URL="redhat-developer-hub-showcase.$(oc get ingresses.config/cluster -o jsonpath='{.spec.domain}')"
-        # oc delete ns showcase || true
+        
+        if oc get namespace showcase >/dev/null 2>&1; then
+          echo "Namespace showcase already exists! refreshing namespace"
+          oc delete namespace showcase
+        fi
+
         curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.3-124-CI/installation/install.sh && chmod +x install.sh
         ./install.sh 1.3-124-CI --namespace showcase --chartrepo
 
-        # sleep 240
+        sleep 240
 
         git clone https://github.com/Omar-AlJaljuli/janus-idp-backstage-showcase-.git
         cd janus-idp-backstage-showcase- || exit
@@ -50,6 +55,6 @@ spec:
         yarn playwright install
         
         cd playwright/e2e/
-        yarn playwright test ./instance-health-check.spec.ts
+        yarn playwright test ./konflux-poc.spec.ts
         
 
