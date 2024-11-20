@@ -47,7 +47,7 @@ spec:
         git checkout "Konflux-CI" || exit
         cd e2e-tests/
         # npm install
-        npm init playwright@latest
+        # npm init playwright@latest
         
         cd playwright/e2e/
         npx playwright test ./instance-health-check.spec.ts
