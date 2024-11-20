@@ -24,7 +24,7 @@ spec:
           value: $(params.rhdh_secrets)
       script: |
         #!/usr/bin/env bash
-        -xe
+        set -xe
         export HOME WORKSPACE
         HOME=/tmp
         WORKSPACE=$(pwd)
