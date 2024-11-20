@@ -55,6 +55,6 @@ spec:
         yarn playwright install
         
         cd playwright/e2e/
-        yarn playwright test ./instance-health-check.spec.ts
+        yarn playwright test ./instance-health-check.spec.ts ./konflux-poc.spec.ts
         
 
