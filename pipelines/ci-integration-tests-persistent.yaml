@@ -6,25 +6,7 @@ spec:
   description: |
     integration test which deploys RHDH onto an existing persistent cluster using Helm and runs the e2e
     test suite onto that instance
-  params:
-    - description: Snapshot of the application
-      name: SNAPSHOT
-      default: '{"components": [{"name":"test2", "containerImage": "quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2"}]}'
-      type: string
   tasks:
-    - name: parse-metadata
-      taskRef:
-        resolver: git
-        params:
-          - name: url
-            value: https://github.com/konflux-ci/integration-examples
-          - name: revision
-            value: main
-          - name: pathInRepo
-            value: tasks/test_metadata.yaml
-      params:
-        - name: SNAPSHOT
-          value: $(params.SNAPSHOT)
     - name: openshift-ci-tests
       taskRef:
         resolver: git
