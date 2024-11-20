@@ -46,7 +46,7 @@ spec:
         cd janus-idp-backstage-showcase- || exit
         git checkout "Konflux-CI" || exit
         cd e2e-tests/
-        npm install
+        # npm install
         npm init playwright@latest
         
         cd playwright/e2e/
