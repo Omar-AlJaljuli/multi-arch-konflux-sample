@@ -14,7 +14,7 @@ spec:
         secretName: $(params.rhdh_secrets)
   steps:
     - name: deploy-and-test
-      image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/test2:5bca399965bf7bebe60d7739ccaecbf46ad60e60 # Container image with OC installed
+      image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/konflux-test-poc:73138599dd32ca889204243c83fd8ecf42f2ff06 # Container image with OC installed
       volumeMounts:
         - mountPath: "/etc/secrets"
           name: $(params.rhdh_secrets)
