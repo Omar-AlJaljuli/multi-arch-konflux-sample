@@ -30,8 +30,6 @@ spec:
         WORKSPACE=$(pwd)
         cd /tmp || exit
 
-        sleep 240
-
         API_SERVER_URL=$(cat /etc/secrets/API_SERVER_URL)
         USERNAME=$(cat /etc/secrets/USERNAME)
         PASSWORD=$(cat /etc/secrets/PASSWORD)
@@ -41,6 +39,8 @@ spec:
         
         curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.3-124-CI/installation/install.sh && chmod +x install.sh
         ./install.sh 1.3-124-CI --namespace showcase --chartrepo
+
+        sleep 240
 
         check_backstage_running redhat-developer-hub showcase ${BASE_URL}
         git clone https://github.com/Omar-AlJaljuli/janus-idp-backstage-showcase-.git
