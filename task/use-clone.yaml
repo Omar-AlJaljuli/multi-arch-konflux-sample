@@ -16,7 +16,7 @@ spec:
         - $(params.SOURCE_ARTIFACT)=/var/workdir/source
     - name: publish
       image: ubuntu
-      workdir: /var/workdir/
+      workingDir: /var/workdir/
       script: |
         #!/usr/bin/env bash
 
