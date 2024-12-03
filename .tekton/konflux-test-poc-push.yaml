@@ -467,10 +467,6 @@ spec:
         operator: in
         values:
         - "true"
-      - input: $(tasks.clone-repository.results.url)
-        operator: in
-        value:
-        - "https://gitlab.cee.redhat.com/rhidp/rhdh"
       runAfter:
       - build-image-index
       taskSpec:
@@ -485,7 +481,7 @@ spec:
             image: "$(params.SOURCE_ARTIFACT).git"
             script: |
               #!/usr/bin/env bash
-              
+
               ls -la
     workspaces:
     - name: git-auth
