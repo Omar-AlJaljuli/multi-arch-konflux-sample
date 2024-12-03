@@ -5,6 +5,9 @@ metadata:
 spec:
   description: |
     This task runs publishes the helm chart
+  params:
+  - name: SOURCE_ARTIFACT
+    default: ""
   volumes:
   - name: workdir
     emptyDir: {}
