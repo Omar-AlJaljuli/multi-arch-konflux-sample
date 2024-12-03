@@ -458,6 +458,35 @@ spec:
         operator: in
         values:
         - "false"
+    - name: publish-helm
+      params:
+      - name: SOURCE_ARTIFACT
+        value: $(tasks.clone-repository.results.SOURCE_ARTIFACT)
+      when:
+      - input: $(tasks.init.results.build)
+        operator: in
+        values:
+        - "true"
+      - input: $(tasks.clone-repository.results.url)
+        operator: in
+        value:
+        - "https://gitlab.cee.redhat.com/rhidp/rhdh"
+      runAfter:
+      - build-image-index
+      taskSpec:
+        params:
+        - name: SOURCE_ARTIFACT
+          default: ""
+        steps:
+          - name: publish-helm
+            env:
+            - name: 
+              value: 
+            image: "$(params.SOURCE_ARTIFACT).git"
+            script: |
+              #!/usr/bin/env bash
+              
+              ls -la
     workspaces:
     - name: git-auth
       optional: true
