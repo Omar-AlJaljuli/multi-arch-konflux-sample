@@ -475,13 +475,10 @@ spec:
           default: ""
         steps:
           - name: publish-helm
-            env:
-            - name: 
-              value: 
-            image: "$(params.SOURCE_ARTIFACT).git"
+            image: "quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/konflux-test-poc:2d1a75bc587ea02c12c169209734023891971c62.git"
             script: |
               #!/usr/bin/env bash
-
+              
               ls -la
     workspaces:
     - name: git-auth
