@@ -469,17 +469,15 @@ spec:
         - "true"
       runAfter:
       - build-image-index
-      taskSpec:
+      taskRef:
+        resolver: git
         params:
-        - name: SOURCE_ARTIFACT
-          default: ""
-        steps:
-          - name: publish-helm
-            image: "quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/konflux-test-poc:2d1a75bc587ea02c12c169209734023891971c62.git"
-            script: |
-              #!/usr/bin/env bash
-              
-              ls -la
+          - name: url
+            value: https://github.com/Omar-AlJaljuli/multi-arch-konflux-sample
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: task/use-clone.yaml
     workspaces:
     - name: git-auth
       optional: true
