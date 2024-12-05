@@ -5,80 +5,10 @@ metadata:
 spec:
   description: |
     This step runs the script that deploys RHDH and runs the tests
-  params:
-    - name: rhdh_secrets
-      default: rhdh-secrets
-  volumes:
-    - name: $(params.rhdh_secrets)
-      secret: 
-        secretName: $(params.rhdh_secrets)
   steps:
     - name: deploy-and-test
-      image: quay.io/redhat-user-workloads/rh-ee-oaljalju-tenant/konflux-test-poc:73138599dd32ca889204243c83fd8ecf42f2ff06 # Container image with OC installed
-      volumeMounts:
-        - mountPath: "/etc/secrets"
-          name: $(params.rhdh_secrets)
-          readOnly: true
-      env:
-        - name: RHDH_SECRETS
-          value: $(params.rhdh_secrets)
+      image: 'registry.redhat.io/ubi9/ubi@sha256:b632d0cc6263372a90e9097dcac0a369e456b144a66026b9eac029a22f0f6e07'
       script: |
         #!/usr/bin/env bash
-        set -xe
-        export HOME WORKSPACE
-        HOME=/tmp
-        WORKSPACE=$(pwd)
-        cd /tmp || exit
-
-        check_backstage_running() {
-          local release_name=$1
-          local namespace=$2
-          local url=$3
-          local max_attempts=30
-          local wait_seconds=30
-          echo "Checking if Backstage is up and running at ${url}"
-          for ((i = 1; i <= max_attempts; i++)); do
-            local http_status
-            http_status=$(curl --insecure -I -s "${url}" | grep HTTP | awk '{print $2}')
-            if [ "${http_status}" -eq 200 ]; then
-              echo "Backstage is up and running!"
-              export BASE_URL="${url}"
-              echo "######## BASE URL ########"
-              echo "${BASE_URL}"
-              return 0
-            else
-              echo "Attempt ${i} of ${max_attempts}: Backstage not yet available (HTTP Status: ${http_status})"
-              sleep "${wait_seconds}"
-            fi
-          done
-          echo "Failed to reach Backstage at ${BASE_URL} after ${max_attempts} attempts." | tee -a "/tmp/${LOGFILE}"
-          return 1
-        }
-
-        API_SERVER_URL=$(cat /etc/secrets/API_SERVER_URL)
-        USERNAME=$(cat /etc/secrets/USERNAME)
-        PASSWORD=$(cat /etc/secrets/PASSWORD)
-        oc login ${API_SERVER_URL} --username=${USERNAME} --password=${PASSWORD}
-
-        export BASE_URL="https://redhat-developer-hub-showcase.$(oc get ingresses.config/cluster -o jsonpath='{.spec.domain}')"
-        
-        if oc get namespace showcase >/dev/null 2>&1; then
-          echo "Namespace showcase already exists! refreshing namespace"
-          oc delete namespace showcase
-        fi
-
-        curl -sSLO https://raw.githubusercontent.com/rhdh-bot/openshift-helm-charts/redhat-developer-hub-1.3-124-CI/installation/install.sh && chmod +x install.sh
-        ./install.sh 1.3-124-CI --namespace showcase --chartrepo
-
-        check_backstage_running redhat-developer-hub showcase ${BASE_URL}
-
-        git clone https://github.com/Omar-AlJaljuli/janus-idp-backstage-showcase-.git
-        cd janus-idp-backstage-showcase- || exit
-        git checkout "Konflux-POC" || exit
-        cd e2e-tests/
-        yarn install
-        yarn playwright install
-        
-        yarn showcase
-        
+        google-chrome --incognito "$URL"
 
