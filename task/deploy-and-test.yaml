@@ -10,7 +10,7 @@ spec:
       image: 'registry.redhat.io/ubi9/ubi@sha256:b632d0cc6263372a90e9097dcac0a369e456b144a66026b9eac029a22f0f6e07'
       script: |
         #!/usr/bin/env bash
-        dnf install -y google-chrome
+        dnf install -y google-chrome-stable
         google-chrome --version
         pushd --help
         popd --help
