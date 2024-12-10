@@ -11,7 +11,5 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -xe
-        google-chrome --incognito "$URL" || true
-        pushd --help
-        popd --help
+        dnf -y -q rsync
 
