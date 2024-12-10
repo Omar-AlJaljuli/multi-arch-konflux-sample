@@ -11,5 +11,5 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -xe
-        dnf -y -q rsync
+        dnf install -y -q rsync
 
