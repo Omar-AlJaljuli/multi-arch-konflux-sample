@@ -466,7 +466,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-konflux-test-poc
   workspaces:
   - name: git-auth
     secret:
