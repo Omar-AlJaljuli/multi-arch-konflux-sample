@@ -462,28 +462,29 @@ spec:
       params:
       - name: SOURCE_ARTIFACT
         value: $(tasks.clone-repository.results.SOURCE_ARTIFACT)
+      runAfter:
+      - build-image-index
+      taskRef:
+        params:
+        - name: url
+          value: https://github.com/Omar-AlJaljuli/multi-arch-konflux-sample
+        - name: revision
+          value: main
+        - name: pathInRepo
+          value: task/use-clone.yaml
+        resolver: git
       when:
       - input: $(tasks.init.results.build)
         operator: in
         values:
         - "true"
-      runAfter:
-      - build-image-index
-      taskRef:
-        resolver: git
-        params:
-          - name: url
-            value: https://github.com/Omar-AlJaljuli/multi-arch-konflux-sample
-          - name: revision
-            value: main
-          - name: pathInRepo
-            value: task/use-clone.yaml
     workspaces:
     - name: git-auth
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-konflux-test-poc
   workspaces:
   - name: git-auth
     secret:
